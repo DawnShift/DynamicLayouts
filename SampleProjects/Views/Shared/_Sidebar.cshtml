@@ -1,0 +1,26 @@
+﻿@using SampleProjects.HelperMethods;
+
+@{
+    var applicationSubList = new List<SublinkList>
+{ new SublinkList {  Action= "VmSnoozlist",Controller ="Application"},
+                                      new SublinkList {Action="GetVmResourcegroupList",Controller="Application" } };
+}
+
+
+<div class="sidenav">
+    @Html.ActionLink("Home", "Index", "Home", null, new { @class = Html.SetativeLink("Index", "Home") })
+    @Html.ActionLink("About", "About", "Home", null, new { @class = Html.SetativeLink("About", "Home") })
+    @Html.ActionLink("Contact", "Contact", "Home", null, new { @class = Html.SetativeLink("Contact", "Home") })
+
+    @*// @Html.SetativeLink();*@
+    <button class="dropdown-btn
+            @Html.SetActiveDropDown(applicationSubList)">
+        Applications
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container" style="@Html.ExpandDropDown(applicationSubList)">
+        @Html.ActionLink("Vm Snooze", "VmSnoozlist", "Application", null, new { @class = Html.SetativeLink("VmSnoozlist", "Application") })
+        @Html.ActionLink("Resource Groups", "GetVmResourcegroupList", "Application", null, new { @class = Html.SetativeLink("GetVmResourcegroupList", "Application") })
+    </div>
+</div>
+
