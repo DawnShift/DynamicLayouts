@@ -125,7 +125,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="HelperMethods\SidebarHelper.cs" />
+    <Compile Include="HelperMethods\Sidebar\SideBarDataStore.cs" />
+    <Compile Include="HelperMethods\Sidebar\SidebarHelper.cs" />
+    <Compile Include="HelperMethods\Sidebar\SidebarModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
