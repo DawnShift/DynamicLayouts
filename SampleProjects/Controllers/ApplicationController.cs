@@ -9,7 +9,7 @@ namespace SampleProjects.Controllers
               => View();
         
         
-        public ActionResult GetVmResourcegroupList()
+        public ActionResult GetVmResourcegroupList(int vmId)
               => View();
 
         // GET: Application

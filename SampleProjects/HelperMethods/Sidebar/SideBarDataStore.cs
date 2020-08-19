@@ -29,7 +29,7 @@ namespace SampleProjects.HelperMethods.Sidebar
                 },
                 new SidebarModel {
                     Links = new List<NavLinks> { new NavLinks { Order=2, Action = "VmSnoozlist", Controller = "Application", LinkText = "Vm Snooze" },
-                                                 new NavLinks {Order=1, Action = "GetVmResourcegroupList", Controller = "Application", LinkText = "Resource Groups" } },
+                                                 new NavLinks {Order=1, Action = "GetVmResourcegroupList", Controller = "Application", LinkText = "Resource Groups", Parameters="?vmId=1" } },
                     IsMultiLevel = true,
                     MenuName = "Application",
                     Order = 3

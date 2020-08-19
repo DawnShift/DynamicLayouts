@@ -1,6 +1,6 @@
 ﻿@using SampleProjects.HelperMethods;
 @using SampleProjects.HelperMethods.Sidebar;
-   
+
 <div class="sidenav">
     @foreach (var items in SideBarDataStore.SideBar.Menu.OrderBy(x => x.Order))
     {
@@ -18,9 +18,10 @@
             <div class="dropdown-container" style="@Html.ExpandDropDown(items.Links)">
                 @foreach (var subLinks in items.Links.OrderBy(x => x.Order))
                 {
-                    @Html.ActionLink(subLinks.LinkText, subLinks.Action, subLinks.Controller, null, new { @class = Html.SetativeLink(subLinks.Action, subLinks.Controller) })
+                    string url = Url.Action(subLinks.Action, subLinks.Controller) + subLinks.Parameters;
+                    <a href="@url" class="@Html.SetativeLink(subLinks.Action, subLinks.Controller) ">@subLinks.LinkText</a>
                 }
-            </div> 
+            </div>
         }
     }
 </div> 
