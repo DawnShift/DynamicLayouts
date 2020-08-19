@@ -1,24 +1,26 @@
 ﻿@using SampleProjects.HelperMethods;
 @using SampleProjects.HelperMethods.Sidebar;
-
+   
 <div class="sidenav">
-    @foreach (var singleLinks in SideBarDataStore.SideBar.Menu.SingleLevelMenu)
+    @foreach (var items in SideBarDataStore.SideBar.Menu.OrderBy(x => x.Order))
     {
-        @Html.ActionLink(singleLinks.LinkText, singleLinks.Action, singleLinks.Controller, null, new { @class = Html.SetativeLink(singleLinks.Action, singleLinks.Controller) })
+        if (items.IsMultiLevel == false && items.Links.Count > 0)
+        {
+            @Html.ActionLink(items.Links[0].LinkText, items.Links[0].Action, items.Links[0].Controller, null, new { @class = Html.SetativeLink(items.Links[0].Action, items.Links[0].Controller) })
+        }
+        else
+        {
+            <button class="dropdown-btn
+            @Html.SetActiveDropDown(items.Links)">
+                @items.MenuName
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container" style="@Html.ExpandDropDown(items.Links)">
+                @foreach (var subLinks in items.Links.OrderBy(x => x.Order))
+                {
+                    @Html.ActionLink(subLinks.LinkText, subLinks.Action, subLinks.Controller, null, new { @class = Html.SetativeLink(subLinks.Action, subLinks.Controller) })
+                }
+            </div> 
+        }
     }
-
-    @foreach (var multiLinks in SideBarDataStore.SideBar.Menu.MultiLevelMenu)
-    {
-        <button class="dropdown-btn
-            @Html.SetActiveDropDown(multiLinks.Links)">
-            @multiLinks.MenuName
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container" style="@Html.ExpandDropDown(multiLinks.Links)">
-            @foreach (var subLinks in multiLinks.Links)
-            {
-                @Html.ActionLink(subLinks.LinkText, subLinks.Action, subLinks.Controller, null, new { @class = Html.SetativeLink(subLinks.Action, subLinks.Controller) })
-            }
-        </div>
-    }
-</div>
+</div> 

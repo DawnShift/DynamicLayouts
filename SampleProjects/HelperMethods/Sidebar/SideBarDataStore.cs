@@ -6,29 +6,39 @@ namespace SampleProjects.HelperMethods.Sidebar
     public sealed class SideBarDataStore
     {
         private SideBarDataStore()
-        {
-            Menu = new SidebarModel
+        {  
+            Menu = new List<SidebarModel>
             {
-                SingleLevelMenu = new List<NavLinks>
-                {
-                    new NavLinks{Action ="Index", Controller="Home",LinkText="Home"},
-                    new NavLinks{ Action="About",Controller="Home",LinkText="About"},
-                    new NavLinks{ Action="Contact",Controller="Home",LinkText="Contact"},
+                new SidebarModel {
+                    Links = new List<NavLinks> { new NavLinks { Action = "Index", Controller = "Home", LinkText = "Home" } },
+                    IsMultiLevel = false,
+                    MenuName = string.Empty,
+                    Order = 1
                 },
-                MultiLevelMenu = new List<MultiLevelMenu> {
-                  new MultiLevelMenu{
-                     MenuName ="Application",
-                      Links= new List<NavLinks>{
-                        new NavLinks{Action ="VmSnoozlist", Controller="Application",LinkText="Vm Snooze"},
-                         new NavLinks{ Action="GetVmResourcegroupList",Controller="Application",LinkText="Resource Groups"}
-                      }
-                  }
-                 }
+                new SidebarModel {
+                    Links = new List<NavLinks> { new NavLinks { Action = "About", Controller = "Home", LinkText = "About" } },
+                    IsMultiLevel = false,
+                    MenuName = string.Empty,
+                    Order = 2
+                },
+                new SidebarModel {
+                    Links = new List<NavLinks> { new NavLinks { Action = "Contact", Controller = "Home", LinkText = "Contact" } },
+                    IsMultiLevel = false,
+                    MenuName = string.Empty,
+                    Order = 4
+                },
+                new SidebarModel {
+                    Links = new List<NavLinks> { new NavLinks { Order=2, Action = "VmSnoozlist", Controller = "Application", LinkText = "Vm Snooze" },
+                                                 new NavLinks {Order=1, Action = "GetVmResourcegroupList", Controller = "Application", LinkText = "Resource Groups" } },
+                    IsMultiLevel = true,
+                    MenuName = "Application",
+                    Order = 3
+                }
             };
-
         }
+
         private static readonly Lazy<SideBarDataStore> lazy = new Lazy<SideBarDataStore>(() => new SideBarDataStore());
-        public SidebarModel Menu { get; }
+        public List<SidebarModel> Menu { get; }
         public static SideBarDataStore SideBar
         {
             get => lazy.Value;
