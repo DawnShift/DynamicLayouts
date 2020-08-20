@@ -24,4 +24,43 @@
             </div>
         }
     }
-</div> 
+</div>
+
+@*@foreach (var items in SideBarDataStore.SideBar.Menu.OrderBy(x => x.Order))
+{
+    bool isAutherized = items.IsAdminPanel == true ? (Session["UserRole"].ToString() == "Owner") : true;
+    if (isAutherized)
+    {
+        if (items.IsMultiLevel == false && items.Links.Count > 0)
+        {
+            string url = Url.Action(items.Links[0].Action, items.Links[0].Controller) + items.Links[0].Parameters;
+            <li class="@Html.SetativeLink(items.Links[0].Action, items.Links[0].Controller,"active")">
+                <a class="treeview_test" href="@url">
+                    @items.Links[0].LinkText
+                </a>
+            </li>
+        }
+        else
+        {
+        <li class="@Html.SetActiveDropDown(items.Links,"active treeview")">
+            <a class="treeview_test" href="#">
+                @items.MenuName
+            </a>
+            <ul class="treeview-menu"> 
+                @foreach (var subLinks in items.Links.OrderBy(x => x.Order))
+                {
+                    string url = Url.Action(subLinks.Action, subLinks.Controller) + subLinks.Parameters;
+                    <li class="@Html.SetativeLink(subLinks.Action, subLinks.Controller,"active")">
+                        <a class="treeview_test" href="@url">
+                            @items.Links[0].LinkText
+                        </a>
+                    </li>
+                }
+            </ul>
+        </li>
+        }
+    }
+}*@
+
+
+                
