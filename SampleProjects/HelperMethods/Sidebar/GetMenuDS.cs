@@ -43,22 +43,22 @@ namespace SampleProjects.HelperMethods.Sidebar
 
         private static async Task<SidebarModel> GetWikiFromDb(int count)
         {
-            string tableName = ConfigurationManager.AppSettings["WikiCloudApplication"];
-            StorageTableManager TableManagerObj = new StorageTableManager(tableName);
-            WikiApplicationModel WikiModelObj = new WikiApplicationModel();
-            // Retrieve the ResourceGroup object where RowKey eq value of id
-            List<WikiApplicationModel> WikiappListObj = await TableManagerObj.RetrieveEntity<WikiApplicationModel>(null);
-            if (WikiappListObj.Count != 0)
-            {
-                return new SidebarModel
-                {
-                    IsMultiLevel = true,
-                    MenuName = "Application",
-                    Order = count,
-                    IsAdminPanel = false,
-                    Links = WikiappListObj.Select(x => new NavLinks { Order = 1, Action = "WikiViewPageData", Controller = "Wiki", LinkText = "<i class=\"fa fa-user-plus\"></i>" + x.MenuName }).ToList()
-                };
-            }
+            //string tableName = ConfigurationManager.AppSettings["WikiCloudApplication"];
+            //StorageTableManager TableManagerObj = new StorageTableManager(tableName);
+            //WikiApplicationModel WikiModelObj = new WikiApplicationModel();
+            //// Retrieve the ResourceGroup object where RowKey eq value of id
+            //List<WikiApplicationModel> WikiappListObj = await TableManagerObj.RetrieveEntity<WikiApplicationModel>(null);
+            //if (WikiappListObj.Count != 0)
+            //{
+            //    return new SidebarModel
+            //    {
+            //        IsMultiLevel = true,
+            //        MenuName = "Application",
+            //        Order = count,
+            //        IsAdminPanel = false,
+            //        Links = WikiappListObj.Select(x => new NavLinks { Order = 1, Action = "WikiViewPageData", Controller = "Wiki", LinkText = "<i class=\"fa fa-user-plus\"></i>" + x.MenuName }).ToList()
+            //    };
+            //}
             return null;
         }
     }

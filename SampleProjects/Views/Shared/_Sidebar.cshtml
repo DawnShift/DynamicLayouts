@@ -2,6 +2,7 @@
 @using SampleProjects.HelperMethods.Sidebar;
 
 <div class="sidenav">
+    <div>Refreshed On :- @SideBarDataStore.SideBar.RefreshedOn</div>
     @foreach (var items in SideBarDataStore.SideBar.Menu.OrderBy(x => x.Order))
     {
         if (items.IsMultiLevel == false && items.Links.Count > 0)
