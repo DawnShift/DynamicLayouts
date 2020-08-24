@@ -18,12 +18,16 @@ namespace DataStore.Models
         public string Action { get; set; }
         public string Controller { get; set; }
         public string LinkName { get; set; }
+        public string MenuName { get; set; }
         public string Parameters { get; set; }
         private string Permisssion { get; set; } = string.Empty;
         public string[] Permisssions {
             get {
                return string.IsNullOrEmpty(this.Permisssion) ? new string[0] :
                                      this.Permisssion.Split(',').ToArray();
+            }
+            set {
+                this.Permisssion = string.Join(",", value);
             }
         }
     }

@@ -12,26 +12,30 @@ namespace SampleProjects.Controllers
 {
     [AllowAnonymous]
     public class AuthController : Controller
-    { 
+    {
         public ActionResult Login(string returnUrl)
-            => View(new LoginViewModel { ReturnUrl = returnUrl });
-
+        {
+            Request.GetOwinContext().Authentication.SignOut("ApplicationCookie"); 
+            return View(new LoginViewModel { ReturnUrl = returnUrl });
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginViewModel model)
         {
+            Request.GetOwinContext().Authentication.SignOut("ApplicationCookie");
+            SideBarDataStore.Dispose();
             if (ModelState.IsValid)
             {
                 var user = UserDataStore.User.Where(x => x.Email == model.Email && x.Password == model.Password).SingleOrDefault();
                 if (user != null)
                 {
-                    var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, user.FirstName), new Claim(ClaimTypes.Email, user.Email) }, "ApplicationCookie");
+                    var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, user.FirstName), new Claim(ClaimTypes.Email, user.Email), new Claim(ClaimTypes.Sid, user.Id.ToString()) }, "ApplicationCookie");
                     Request.GetOwinContext().Authentication.SignIn(identity);
                     return Redirect(GetRedirectUrl(model.ReturnUrl));
                 }
                 else
-                    ModelState.AddModelError("", "invalid username or password"); 
+                    ModelState.AddModelError("", "invalid username or password");
             }
             return View();
         }
@@ -47,8 +51,9 @@ namespace SampleProjects.Controllers
 
         public ActionResult Logout()
         {
+            Request.GetOwinContext().Authentication.SignOut("ApplicationCookie");
             SideBarDataStore.Dispose();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login");
         }
         // GET: Auth
         //public ActionResult Index()
