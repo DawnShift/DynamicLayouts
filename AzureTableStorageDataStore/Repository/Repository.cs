@@ -19,14 +19,12 @@ namespace AzureTableStorageDataStore.Repository
             tableContext = tableClient.GetTableReference(typeof(T).Name);
             tableContext.CreateIfNotExistsAsync();
         }
-
         public TableResult Insert(T entity)
         {
             if (entity == null)
                 throw new ArgumentNullException("entity", "entity cannot be null");
             return tableContext.Execute(TableOperation.Insert(entity));
         }
-
         public List<TableResult> InsertMany(List<T> entity)
         {
             if (entity == null)
@@ -51,7 +49,6 @@ namespace AzureTableStorageDataStore.Repository
                 batchOp.Add(TableOperation.InsertOrReplace(item));
             return tableContext.ExecuteBatch(batchOp).ToList();
         }
-
         public bool Delete(T entity)
         {
             TableOperation delteOperation = TableOperation.Delete(entity);
@@ -60,8 +57,6 @@ namespace AzureTableStorageDataStore.Repository
         }
         public T GetById<T>(string partetionKey = "", string rowKey = "") where T : ITableEntity, new()
             => tableContext.CreateQuery<T>().Where(x => x.PartitionKey == partetionKey && x.RowKey == rowKey).FirstOrDefault();
-
-
         public IEnumerable<T> RetrieveAllInPartition<T>(string partitionKey) where T : ITableEntity, new()
         {
             var query = new TableQuery<T>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, partitionKey));
