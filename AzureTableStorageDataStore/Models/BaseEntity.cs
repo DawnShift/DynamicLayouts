@@ -1,16 +1,11 @@
-﻿using Microsoft.Azure.Cosmos.Table;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+using Microsoft.Azure.Cosmos.Table;
 
 namespace AzureTableStorageDataStore.Models
 {
-    public class BaseEntity : TableEntity, ITableEntity
+    public class BaseEntity : TableEntity
     {
-        public BaseEntity(string partitionKey, string rowKey)
-        {
-            PartitionKey = partitionKey;
-            RowKey = rowKey;
-        }
+        //mapper to map partition Key
+       // public string PartKey { get { return PartitionKey; } set { PartitionKey = value; } }
     }
 }

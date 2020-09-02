@@ -3,65 +3,71 @@ using Microsoft.Azure.Cosmos.Table;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace AzureTableStorageDataStore.Repository
 {
     public class Repository<T> : IRepository<T> where T : BaseEntity
     {
 
-        private const string accountName = "driftstaccnt01";
-        private const string token = "5yYb7SfhFv5jGgbMjUM+aiGGt0ppsHCg6RYHcSHU6iZ+j6FNXD/oFBez+Z2fRlNUdR1hs7eUVcCot2wkM8PYiA==";
+        private const string accountName = "<Account_Name>";
+        private const string token = "<Hash_Key>";
         private readonly CloudTable tableContext;
         public Repository()
         {
             var storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, token), true);
             var tableClient = storageAccount.CreateCloudTableClient();
             tableContext = tableClient.GetTableReference(typeof(T).Name);
-            tableContext.CreateIfNotExists();
+            tableContext.CreateIfNotExistsAsync();
         }
 
-        public TableResult Insrt(T entity)
+        public TableResult Insert(T entity)
         {
             if (entity == null)
                 throw new ArgumentNullException("entity", "entity cannot be null");
             return tableContext.Execute(TableOperation.Insert(entity));
-        } 
+        }
 
-        public TableBatchResult InsrtMany(List<T>entity)
-        { 
+        public List<TableResult> InsertMany(List<T> entity)
+        {
             if (entity == null)
                 throw new ArgumentNullException("entity", "entity cannot be null");
-             var batchOp = new TableBatchOperation() { };
+            var batchOp = new TableBatchOperation() { };
             foreach (T item in entity)
                 batchOp.Add(TableOperation.Insert(item));
-            return tableContext.ExecuteBatch(batchOp);
-        } 
-        public TableResult InsrtOrUpdate(T entity)
+            return tableContext.ExecuteBatch(batchOp).ToList();
+        }
+        public TableResult InsertOrUpdate(T entity)
         {
             if (entity == null)
                 throw new ArgumentNullException("entity", "entity cannot be null");
             return tableContext.Execute(TableOperation.InsertOrReplace(entity));
-        } 
-        public TableBatchResult InsrtManyOrUpdateMany(List<T> entity)
+        }
+        public List<TableResult> InsertManyOrUpdateMany(List<T> entity)
         {
             if (entity == null)
                 throw new ArgumentNullException("entity", "entity cannot be null");
             var batchOp = new TableBatchOperation() { };
             foreach (T item in entity)
                 batchOp.Add(TableOperation.InsertOrReplace(item));
-            return tableContext.ExecuteBatch(batchOp);
-        }
-        public T GetById(string partetionKey, string rowKey)
-        {
-            var type = typeof(T);
-           var result= tableContext.Execute(TableOperation.Retrieve(partetionKey, rowKey));
-            return (T)result.Result;  
+            return tableContext.ExecuteBatch(batchOp).ToList();
         }
 
-        public void FilteredGet()
+        public bool Delete(T entity)
         {
-            //_ = tableContext.CreateQuery().
+            TableOperation delteOperation = TableOperation.Delete(entity);
+            tableContext.Execute(delteOperation);
+            return true;
         }
+        public T GetById<T>(string partetionKey = "", string rowKey = "") where T : ITableEntity, new()
+            => tableContext.CreateQuery<T>().Where(x => x.PartitionKey == partetionKey && x.RowKey == rowKey).FirstOrDefault();
+
+
+        public IEnumerable<T> RetrieveAllInPartition<T>(string partitionKey) where T : ITableEntity, new()
+        {
+            var query = new TableQuery<T>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, partitionKey));
+            return tableContext.ExecuteQuerySegmented<T>(query, null).Results;
+        }
+        public IEnumerable<T> GetEntities<T>(Func<T, bool> condition) where T : ITableEntity, new()
+         => tableContext.CreateQuery<T>().Where(condition).ToList();
     }
 }

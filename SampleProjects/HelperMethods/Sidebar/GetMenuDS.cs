@@ -1,10 +1,7 @@
 ﻿using DataStore.DataStore;
-using DataStore.Models;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace SampleProjects.HelperMethods.Sidebar
 {
